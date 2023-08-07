@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CatapultToc Version="1" DescendantCount="35">
+    <TocEntry Title="Introduction" Link="/Content/welcome.htm" ComputedResetPageLayout="true" ComputedFirstTopic="true" DescendantCount="0" />
+    <TocEntry Title="Basics" Link="/Content/basics.htm" ComputedFirstTopic="false" DescendantCount="5">
+        <TocEntry Title="Open a Database" Link="/Content/basics.htm#OpenDB" ComputedFirstTopic="false" DescendantCount="0" />
+        <TocEntry Title="Store an Object" Link="/Content/basics.htm#StoreObject" ComputedFirstTopic="false" DescendantCount="0" />
+        <TocEntry Title="Query the Database" Link="/Content/basics.htm#QueryDB" ComputedFirstTopic="false" DescendantCount="0" />
+        <TocEntry Title="Update an Object" Link="/Content/basics.htm#UpdateObject" ComputedFirstTopic="false" DescendantCount="0" />
+        <TocEntry Title="Delete an Object" Link="/Content/basics.htm#DeleteObject" ComputedFirstTopic="false" DescendantCount="0" />
+    </TocEntry>
+    <TocEntry Title="Queries" Link="/Content/queries.htm" ComputedFirstTopic="false" DescendantCount="2">
+        <TocEntry Title="Native Queries" Link="/Content/queries.htm#NativeQueries" StartSection="false" StartChapter="false" VolumeNumberReset="same" SectionNumberReset="continue" ChapterNumberReset="continue" ComputeToc="false" conditions="Primary.Java" ComputedFirstTopic="false" DescendantCount="0" />
+        <TocEntry Title="SODA" Link="/Content/queries.htm#SODA" ComputedFirstTopic="false" DescendantCount="0" />
+    </TocEntry>
+    <TocEntry Title="Activation" Link="/Content/activation.htm" ComputedFirstTopic="false" DescendantCount="2">
+        <TocEntry Title="Activation in Action" Link="/Content/activation.htm#ActivationInAction" ComputedFirstTopic="false" DescendantCount="0" />
+        <TocEntry Title="Deal With Activation" Link="/Content/activation.htm#DealWithActivation" ComputedFirstTopic="false" DescendantCount="0" />
+    </TocEntry>
+    <TocEntry Title="Update Concept" Link="/Content/update-concept.htm" ComputedFirstTopic="false" DescendantCount="2">
+        <TocEntry Title="Updating in Action" Link="/Content/update-concept.htm#UpdateDepthInAction" ComputedFirstTopic="false" DescendantCount="0" />
+        <TocEntry Title="Deal with Updates" Link="/Content/update-concept.htm#DealWithIt" ComputedFirstTopic="false" DescendantCount="0" />
+    </TocEntry>
+    <TocEntry Title="Transparent Persistence" Link="/Content/transparentpersistence.htm" ComputedFirstTopic="false" DescendantCount="2">
+        <TocEntry Title="Enhance Persistent Classes" Link="/Content/transparentpersistence.htm#Enhance" ComputedFirstTopic="false" DescendantCount="0" />
+        <TocEntry Title="Using Transparent Persistence" Link="/Content/transparentpersistence.htm#UsingIt" ComputedFirstTopic="false" DescendantCount="0" />
+    </TocEntry>
+    <TocEntry Title="Transactions" Link="/Content/transactions.htm" ComputedFirstTopic="false" DescendantCount="3">
+        <TocEntry Title="Commit and Rollback" Link="/Content/transactions.htm#CommitRollback" ComputedFirstTopic="false" DescendantCount="0" />
+        <TocEntry Title="Object State After Rollback" Link="/Content/transactions.htm#ObjectState" ComputedFirstTopic="false" DescendantCount="0" />
+        <TocEntry Title="Multiple Transactions" Link="/Content/transactions.htm#MultipleTx" ComputedFirstTopic="false" DescendantCount="0" />
+    </TocEntry>
+    <TocEntry Title="Indexes" Link="/Content/indexes.htm" ComputedFirstTopic="false" DescendantCount="0" />
+    <TocEntry Title="Configuration" Link="/Content/configuration.htm" ComputedFirstTopic="false" DescendantCount="0" />
+    <TocEntry Title="Client Server Mode" Link="/Content/client-server.htm" ComputedFirstTopic="false" DescendantCount="3">
+        <TocEntry Title="Embedded Clients aka Session Containers" Link="/Content/client-server.htm#SessionContainers" ComputedFirstTopic="false" DescendantCount="0" />
+        <TocEntry Title="Network Client Server Mode" Link="/Content/client-server.htm#NetworkCS" ComputedFirstTopic="false" DescendantCount="0" />
+        <TocEntry Title="Shared Classes" Link="/Content/client-server.htm#SharedClasses" ComputedFirstTopic="false" DescendantCount="0" />
+    </TocEntry>
+    <TocEntry Title="Object Manager" Link="/Content/object-manager.htm" ComputedFirstTopic="false" DescendantCount="0" />
+    <TocEntry Title="Community" Link="/Content/db4ocommunity.htm" ComputedFirstTopic="false" DescendantCount="3">
+        <TocEntry Title="Forums" Link="/Content/db4ocommunity.htm#forums" ComputedFirstTopic="false" DescendantCount="0" />
+        <TocEntry Title="Additional Resources" Link="/Content/db4ocommunity.htm#resources" ComputedFirstTopic="false" DescendantCount="0" />
+        <TocEntry Title="Report Bugs" Link="/Content/db4ocommunity.htm#bugRepors" ComputedFirstTopic="false" DescendantCount="0" />
+    </TocEntry>
+    <TocEntry Title="Contact" Link="/Content/contact.htm" ComputedFirstTopic="false" DescendantCount="0" />
+</CatapultToc>

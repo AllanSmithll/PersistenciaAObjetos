@@ -1,0 +1,146 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="2" MadCap:lastHeight="120" MadCap:lastWidth="624" MadCap:disableMasterStylesheet="true" MadCap:tocPath="Configuration|File Configuration|Storage" MadCap:InPreviewMode="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" MadCap:PathToHelpSystem="../../../../" MadCap:HelpSystemFileName="index.xml" MadCap:SearchType="Stem">
+    <head><title>Pluggable Storage</title>
+        <link href="../../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../../Resources/Stylesheets/OnlineStyle.css" rel="stylesheet" />
+        <script src="../../../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink" style="display: none;"><a href="../../../../index_CSH.html#configuration/file/storage/pluggable_storage.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../../configuration.htm">Configuration</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../../file_configuration.htm">File Configuration</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../storage.htm">Storage</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">Pluggable Storage</span>
+        </div>
+        <script type="text/javascript">/*<![CDATA[*/
+			document.write("<a href=\"" + location.href +"\">");
+			document.write("Direct Link to this Article");
+			document.write('</a>');/*]]>*/</script>
+        <h1>Pluggable Storage</h1>
+        <p>You can implement a storage mechanism yourself. It can be memory,
+native IO, encrypted storage, mirrored storage etc.</p>
+        <p>The implementation is guided by two interfaces. The storage interface which represents a 'file'-system where multiple stored databases can live. And the bin interface which represents the storage access.</p>
+        <p>When you only need a decorator for existing storage implementations, then you can base your implementation on the StorageDecorator and BinDecorator classes. These classes delegate all calls to the underlying implementation, but give you a chance to override certain methods to intercept the calls.</p>
+        <h2>Logging-Storage Example</h2>
+        <p>This example just logs all calls to the storage system:</p>
+        <div class="codesnippet" MadCap:conditions="Primary.Java">
+            <pre class="prettyprint" xml:space="preserve"><span style="color:Blue;">public</span> <![CDATA[ ]]><span style="color:Blue;">class</span> LoggingStorage <span style="color:Blue;">extends</span> StorageDecorator <span style="color:Blue;">implements</span> Storage{
+    <span style="color:Blue;">public</span> LoggingStorage(Storage storage) {
+        <span style="color:Blue;">super</span>(storage);
+    }
+
+    @Override
+    <span style="color:Blue;">public</span> <![CDATA[ ]]><span style="color:Blue;">boolean</span> exists(String uri) {
+        System.out.println(<span style="color:#A31515;">"Called: LoggingStorage.exists("</span>+uri+<span style="color:#A31515;">")"</span>);
+        <span style="color:Blue;">return</span> <![CDATA[ ]]><span style="color:Blue;">super</span>.exists(uri);
+    }
+
+    @Override
+    <span style="color:Blue;">public</span> Bin open(BinConfiguration config) <span style="color:Blue;">throws</span> Db4oIOException {
+        System.out.println(<span style="color:#A31515;">"Called: LoggingStorage.open("</span>+config+<span style="color:#A31515;">")"</span>);
+        <span style="color:Blue;">return</span> <![CDATA[ ]]><span style="color:Blue;">super</span>.open(config);
+    }
+
+    @Override
+    <span style="color:Blue;">protected</span> Bin decorate(BinConfiguration config, Bin bin) {
+        <span style="color:Blue;">return</span> <![CDATA[ ]]><span style="color:Blue;">new</span> LoggingBin(<span style="color:Blue;">super</span>.decorate(config, bin));
+    }
+
+    @Override
+    <span style="color:Blue;">public</span> <![CDATA[ ]]><span style="color:Blue;">void</span> delete(String uri) <span style="color:Blue;">throws</span> IOException {
+        System.out.println(<span style="color:#A31515;">"Called: LoggingStorage.delete("</span>+uri+<span style="color:#A31515;">")"</span>);
+        <span style="color:Blue;">super</span>.delete(uri);
+    }
+
+    @Override
+    <span style="color:Blue;">public</span> <![CDATA[ ]]><span style="color:Blue;">void</span> rename(String oldUri, String newUri) <span style="color:Blue;">throws</span> IOException {
+        System.out.println(<span style="color:#A31515;">"Called: LoggingStorage.rename("</span>+oldUri+<span style="color:#A31515;">","</span>+newUri+<span style="color:#A31515;">")"</span>);
+        <span style="color:Blue;">super</span>.rename(oldUri, newUri);
+    }
+}</pre>
+            <div class="codesnippet-meta">LoggingStorage.java: A logging storage decorator
+			<div class="codedownload"><a href="../../../CodeExamples/configuration/io/Example-configuration-io-java.zip" class="codedownload" MadCap:conditions="Primary.Online">Download Code</a></div><div class="codedownload copylink-marker" MadCap:conditions="Primary.Online"><a href="#copy">Copy Code</a></div></div>
+        </div>
+        <div class="codesnippet" MadCap:conditions="Primary.Java">
+            <pre class="prettyprint" xml:space="preserve"><span style="color:Blue;">public</span> <![CDATA[ ]]><span style="color:Blue;">class</span> LoggingBin <span style="color:Blue;">extends</span> BinDecorator <span style="color:Blue;">implements</span> Bin{
+    <span style="color:Blue;">public</span> LoggingBin(Bin bin) {
+        <span style="color:Blue;">super</span>(bin);
+    }
+
+    @Override
+    <span style="color:Blue;">public</span> <![CDATA[ ]]><span style="color:Blue;">void</span> close() {
+        System.out.println(<span style="color:#A31515;">"Called LoggingBin.close()"</span>);
+        <span style="color:Blue;">super</span>.close();
+    }
+
+    @Override
+    <span style="color:Blue;">public</span> <![CDATA[ ]]><span style="color:Blue;">long</span> length() {
+        System.out.println(<span style="color:#A31515;">"Called LoggingBin.length()"</span>);
+        <span style="color:Blue;">return</span> <![CDATA[ ]]><span style="color:Blue;">super</span>.length();
+    }
+
+    @Override
+    <span style="color:Blue;">public</span> <![CDATA[ ]]><span style="color:Blue;">int</span> read(<span style="color:Blue;">long</span> position, <span style="color:Blue;">byte</span>[] bytes, <span style="color:Blue;">int</span> bytesToRead) {
+        System.out.println(<span style="color:#A31515;">"Called LoggingBin.read("</span>+position+<span style="color:#A31515;">", ...,"</span>+bytesToRead+<span style="color:#A31515;">")"</span>);
+        <span style="color:Blue;">return</span> <![CDATA[ ]]><span style="color:Blue;">super</span>.read(position, bytes, bytesToRead);
+    }
+
+    @Override
+    <span style="color:Blue;">public</span> <![CDATA[ ]]><span style="color:Blue;">void</span> sync() {
+        System.out.println(<span style="color:#A31515;">"Called LoggingBin.sync()"</span>);
+        <span style="color:Blue;">super</span>.sync();
+    }
+
+    @Override
+    <span style="color:Blue;">public</span> <![CDATA[ ]]><span style="color:Blue;">int</span> syncRead(<span style="color:Blue;">long</span> position, <span style="color:Blue;">byte</span>[] bytes, <span style="color:Blue;">int</span> bytesToRead) {
+        System.out.println(<span style="color:#A31515;">"Called LoggingBin.syncRead("</span>+position+<span style="color:#A31515;">", ...,"</span>+bytesToRead+<span style="color:#A31515;">")"</span>);
+        <span style="color:Blue;">return</span> <![CDATA[ ]]><span style="color:Blue;">super</span>.syncRead(position, bytes, bytesToRead);
+    }
+
+    @Override
+    <span style="color:Blue;">public</span> <![CDATA[ ]]><span style="color:Blue;">void</span> write(<span style="color:Blue;">long</span> position, <span style="color:Blue;">byte</span>[] bytes, <span style="color:Blue;">int</span> bytesToWrite) {
+        System.out.println(<span style="color:#A31515;">"Called LoggingBin.write("</span>+position+<span style="color:#A31515;">", ...,"</span>+bytesToWrite+<span style="color:#A31515;">")"</span>);
+        <span style="color:Blue;">super</span>.write(position, bytes, bytesToWrite);
+    }
+
+    @Override
+    <span style="color:Blue;">public</span> <![CDATA[ ]]><span style="color:Blue;">void</span> sync(Runnable runnable) {
+        System.out.println(<span style="color:#A31515;">"Called LoggingBin.sync("</span>+runnable+<span style="color:#A31515;">")"</span>);
+        <span style="color:Blue;">super</span>.sync(runnable);
+    }
+}</pre>
+            <div class="codesnippet-meta">LoggingBin.java: A logging bin decorator
+			<div class="codedownload"><a href="../../../CodeExamples/configuration/io/Example-configuration-io-java.zip" class="codedownload" MadCap:conditions="Primary.Online">Download Code</a></div><div class="codedownload copylink-marker" MadCap:conditions="Primary.Online"><a href="#copy">Copy Code</a></div></div>
+        </div>
+        <script src="../../../Resources/Code/jquery.min.js">
+        </script>
+        <script src="../../../Resources/Code/ZeroClipboard.js">
+        </script>
+        <script type="text/javascript">/* <![CDATA[ */
+window.onload = function(){
+	var pathToFlash = $('html').attr('MadCap:PathToHelpSystem') + 'Content/Resources/Code/ZeroClipboard.swf';
+	ZeroClipboard.setMoviePath(pathToFlash);
+			
+	function bindToClipBord(element,content){
+		var clip = new ZeroClipboard.Client();
+		clip.setText(content);
+		clip.glue(element);
+	};
+		
+	if(location.protocol==='file:'){
+		$('.copylink-marker').remove();
+	} else{
+			$('.copylink-marker').each(function(){
+				var text = $(this).parent().parent().children('.prettyprint').text();
+				$(this).hover(function(){
+					bindToClipBord(this,text);
+				},
+				function(){});
+			});	
+	}		
+};
+                /* ]]> */</script>
+        <script type="text/javascript" src="../../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+    </body>
+</html>

@@ -1,0 +1,194 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="3" MadCap:lastHeight="188" MadCap:lastWidth="625" MadCap:disableMasterStylesheet="true" MadCap:tocPath="" MadCap:InPreviewMode="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" MadCap:PathToHelpSystem="../" MadCap:HelpSystemFileName="index.xml" MadCap:SearchType="Stem">
+    <head><title>Update Concept</title>
+        <link href="SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="Resources/Stylesheets/OnlineStyle.css" rel="stylesheet" />
+        <script src="SkinSupport/MadCapAll.js">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink" style="display: none;"><a href="../index_CSH.html#update-concept.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox"><span class="MCBreadcrumbsPrefix">You are here: </span><span class="MCBreadcrumbs">Updating in Action</span>
+        </div>
+        <script type="text/javascript">/*<![CDATA[*/
+			document.write("<a href=\"" + location.href +"\">");
+			document.write("Direct Link");
+			document.write('</a>');/*]]>*/</script>
+        <h1>Update Concept</h1>
+        <p>How does updating objects work with db4o? Similar to the activation depth, db4o uses an update depth. When we store an object again, db4o only updates the objects up to the given update-depth. This prevents db4o from traversing the whole object graph in order to store the changes.</p>
+        <p>
+            <img src="update-depth_638x254.png" style="width: 638; height: 254;" />
+        </p>
+        <h2><a name="UpdateDepthInAction"></a>Update Depth in Action</h2>
+        <p>Let's see db4o's update strategy in action. We store a driver with his cars and his most loved car. (<a href="javascript:void(0);" class="MCToggler" onclick="FMCToggler( this ); return false;" MadCap:targets="domainModel"><img style="border: none;margin-right: 5px;" src="SkinSupport/DropDownClosed.gif" MadCap:altsrc="SkinSupport/DropDownOpen.gif" class="MCTogglerIcon" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( 'SkinSupport/DropDownOpen.gif' ); }" />Click here</a> to see the example domain model classes)</p>
+        <div MadCap:targetName="domainModel" style="display: none;">
+            <div class="codesnippet" MadCap:conditions="Primary.Java">
+                <pre class="prettyprint" xml:space="preserve"><span style="color:Blue;">public</span> <![CDATA[ ]]><span style="color:Blue;">class</span> Car {
+    <span style="color:Blue;">private</span> String carName;
+
+    <span style="color:Blue;">public</span> Car(String carName) {
+        <span style="color:Blue;">this</span>.carName = carName;
+    }
+
+    <span style="color:Blue;">public</span> String getCarName() {
+        <span style="color:Blue;">return</span> carName;
+    }
+
+    <span style="color:Blue;">public</span> <![CDATA[ ]]><span style="color:Blue;">void</span> setCarName(String carName) {
+        <span style="color:Blue;">this</span>.carName = carName;
+    }
+
+    @Override
+    <span style="color:Blue;">public</span> String toString() {
+        <span style="color:Blue;">return</span> <![CDATA[ ]]><span style="color:#A31515;">"Car{"</span> +
+                <span style="color:#A31515;">"carName='"</span> + carName + <span style="color:#A31515;">'\''</span> +
+                <span style="color:#A31515;">'}'</span>;
+    }
+}</pre>
+                <div class="codesnippet-meta">Car.java: Domain model for cars
+			<div class="codedownload"><a href="CodeExamples/updating/Example-tutorial-updating-java.zip" class="codedownload" MadCap:conditions="Primary.Online">Download Code</a></div><div class="codedownload copylink-marker" MadCap:conditions="Primary.Online"><a href="#copy">Copy Code</a></div></div>
+            </div>
+            <div class="codesnippet" MadCap:conditions="Primary.Java">
+                <pre class="prettyprint" xml:space="preserve"><span style="color:Blue;">public</span> <![CDATA[ ]]><span style="color:Blue;">class</span> Driver {
+    <span style="color:Blue;">private</span> String name;
+    <span style="color:Blue;">private</span> <![CDATA[ ]]><span style="color:Blue;">final</span> List&lt;Car&gt; ownedCars = <span style="color:Blue;">new</span> ArrayList&lt;Car&gt;();
+    <span style="color:Blue;">private</span> Car mostLovedCar;
+
+    <span style="color:Blue;">public</span> Driver(String name) {
+        <span style="color:Blue;">this</span>.name = name;
+    }
+
+    <span style="color:Blue;">public</span> Driver(String name, Car mostLovedCar) {
+        <span style="color:Blue;">this</span>.name = name;
+        <span style="color:Blue;">this</span>.mostLovedCar = mostLovedCar;
+    }
+
+    <span style="color:Blue;">public</span> <![CDATA[ ]]><span style="color:Blue;">void</span> setName(String name) {
+        <span style="color:Blue;">this</span>.name = name;
+    }
+
+    <span style="color:Blue;">public</span> String getName() {
+        <span style="color:Blue;">return</span> name;
+    }
+
+    <span style="color:Blue;">public</span> Car getMostLovedCar() {
+        <span style="color:Blue;">return</span> mostLovedCar;
+    }
+
+    <span style="color:Blue;">public</span> Iterable&lt;Car&gt; getOwnedCars() {
+        <span style="color:Blue;">return</span> ownedCars;
+    }
+
+    <span style="color:Blue;">public</span> <![CDATA[ ]]><span style="color:Blue;">boolean</span> addOwnedCar(Car car) {
+        <span style="color:Blue;">return</span> ownedCars.add(car);
+    }
+}</pre>
+                <div class="codesnippet-meta">Driver.java: Domain model for drivers
+			<div class="codedownload"><a href="CodeExamples/updating/Example-tutorial-updating-java.zip" class="codedownload" MadCap:conditions="Primary.Online">Download Code</a></div><div class="codedownload copylink-marker" MadCap:conditions="Primary.Online"><a href="#copy">Copy Code</a></div></div>
+            </div>
+        </div>
+        <div class="codesnippet" MadCap:conditions="Primary.Java">
+            <pre class="prettyprint" xml:space="preserve">Car beetle = <span style="color:Blue;">new</span> Car(<span style="color:#A31515;">"VW Beetle"</span>);
+Car ferrari = <span style="color:Blue;">new</span> Car(<span style="color:#A31515;">"Ferrari"</span>);
+
+Driver driver = <span style="color:Blue;">new</span> Driver(<span style="color:#A31515;">"John"</span>, ferrari);
+driver.addOwnedCar(beetle);
+driver.addOwnedCar(ferrari);
+
+container.store(driver);</pre>
+            <div class="codesnippet-meta">UpdateConcept.java: Store a driver and his cars
+			<div class="codedownload"><a href="CodeExamples/updating/Example-tutorial-updating-java.zip" class="codedownload" MadCap:conditions="Primary.Online">Download Code</a></div><div class="codedownload copylink-marker" MadCap:conditions="Primary.Online"><a href="#copy">Copy Code</a></div></div>
+        </div>
+        <p>After that we update the driver, change the name of his most loved car and add another car to his collection. Then we update the car in the database.</p>
+        <div class="codesnippet" MadCap:conditions="Primary.Java">
+            <pre class="prettyprint" xml:space="preserve">Driver driver = queryForDriver(container);
+driver.setName(<span style="color:#A31515;">"Johannes"</span>);
+driver.getMostLovedCar().setCarName(<span style="color:#A31515;">"Red Ferrari"</span>);
+driver.addOwnedCar(<span style="color:Blue;">new</span> Car(<span style="color:#A31515;">"Fiat Punto"</span>));
+container.store(driver);</pre>
+            <div class="codesnippet-meta">UpdateConcept.java: Update the driver and his cars
+			<div class="codedownload"><a href="CodeExamples/updating/Example-tutorial-updating-java.zip" class="codedownload" MadCap:conditions="Primary.Online">Download Code</a></div><div class="codedownload copylink-marker" MadCap:conditions="Primary.Online"><a href="#copy">Copy Code</a></div></div>
+        </div>
+        <p>Then we close the database, reopen it and check if the objects have been updated. Unfortunately only the car itself has been updated. That's because db4o by default uses an update-depth of one. That means only the object we pass to the store-method is updated. All referenced objects are not updated. In our case that means that the referenced car and the referenced list of cars isn't updated. </p>
+        <div class="codesnippet" MadCap:conditions="Primary.Java">
+            <pre class="prettyprint" xml:space="preserve">Driver driver = queryForDriver(container);
+<span style="color:Green;">// Is updated</span>
+System.out.println(driver.getName());
+<span style="color:Green;">// Isn't updated at all</span>
+System.out.println(driver.getMostLovedCar().getCarName());
+<span style="color:Green;">// Also the owned car list isn't updated</span>
+<span style="color:Blue;">for</span> (Car car : driver.getOwnedCars()) {
+    System.out.println(car);
+}</pre>
+            <div class="codesnippet-meta">UpdateConcept.java: Check the updated objects
+			<div class="codedownload"><a href="CodeExamples/updating/Example-tutorial-updating-java.zip" class="codedownload" MadCap:conditions="Primary.Online">Download Code</a></div><div class="codedownload copylink-marker" MadCap:conditions="Primary.Online"><a href="#copy">Copy Code</a></div></div>
+        </div>
+        <h2><a name="DealWithIt"></a>Deal with Updates</h2>
+        <p>We've seen that by default only the object passed to the store method is updated. That means we need a strategy to deal with this.</p>
+        <h3>Explicitly Storing Every Changed Object</h3>
+        <p>One way to deal with this is to store every changed object. In our case that would be the driver, the most loved car and the list of owed cars. However in practice this strategy needs too much effort.</p>
+        <div class="codesnippet" MadCap:conditions="Primary.Java">
+            <pre class="prettyprint" xml:space="preserve">container.store(driver);
+container.store(driver.getMostLovedCar());
+container.store(driver.getOwnedCars());</pre>
+            <div class="codesnippet-meta">UpdateConcept.java: Update everything explicitly
+			<div class="codedownload"><a href="CodeExamples/updating/Example-tutorial-updating-java.zip" class="codedownload" MadCap:conditions="Primary.Online">Download Code</a></div><div class="codedownload copylink-marker" MadCap:conditions="Primary.Online"><a href="#copy">Copy Code</a></div></div>
+        </div>
+        <h3>Change the Activation Depth</h3>
+        <p>A simple strategy is to increase the update depth, for example increase the depth to two. This is quite a reasonable update-depth, especially since it will update collections of an object.</p>
+        <div class="codesnippet" MadCap:conditions="Primary.Java">
+            <pre class="prettyprint" xml:space="preserve">EmbeddedConfiguration configuration = Db4oEmbedded.newConfiguration();
+configuration.common().updateDepth(2);</pre>
+            <div class="codesnippet-meta">UpdateConcept.java: Increase the update depth to 2
+			<div class="codedownload"><a href="CodeExamples/updating/Example-tutorial-updating-java.zip" class="codedownload" MadCap:conditions="Primary.Online">Download Code</a></div><div class="codedownload copylink-marker" MadCap:conditions="Primary.Online"><a href="#copy">Copy Code</a></div></div>
+        </div>
+        <p>We can control the update-depth also per class:</p>
+        <div class="codesnippet" MadCap:conditions="Primary.Java">
+            <pre class="prettyprint" xml:space="preserve">EmbeddedConfiguration configuration = Db4oEmbedded.newConfiguration();
+<span style="color:Green;">// Update all referenced objects for the Driver class</span>
+configuration.common().objectClass(Driver.<span style="color:Blue;">class</span>).cascadeOnUpdate(<span style="color:Blue;">true</span>);</pre>
+            <div class="codesnippet-meta">UpdateConcept.java: More update options
+			<div class="codedownload"><a href="CodeExamples/updating/Example-tutorial-updating-java.zip" class="codedownload" MadCap:conditions="Primary.Online">Download Code</a></div><div class="codedownload copylink-marker" MadCap:conditions="Primary.Online"><a href="#copy">Copy Code</a></div></div>
+        </div>
+        <h3>Transparent Persistence</h3>
+        <p>The last and most elaborate option is to use transparent persistence. In that case db4o manages all updates for us. We just can change objects and db4o will track all changes for us.  To get transparent persistence we need to enhance our classes at compile time. Read <a href="transparentpersistence.htm">this section of the tutorial</a> where we use transparent persistence.</p>
+        <div id="footer" MadCap:conditions="Primary.Online">
+            <p align="center">Do you have any questions, suggestions or feedback? 
+			Ask your questions in the <a href="http://community.versant.com/Forums.aspx" target="_top">db4o forums</a>. 
+			Join the <a href="http://community.versant.com" target="_top">db4o community</a> for additional resources and news.
+			<br /><br /><a href="http://www.db4o.com/" target="_top">www.db4o.com</a></p>
+        </div>
+        <script src="Resources/Code/jquery.min.js">
+        </script>
+        <script src="Resources/Code/ZeroClipboard.js">
+        </script>
+        <script type="text/javascript">/* <![CDATA[ */ 
+window.onload = function(){
+	var pathToFlash = $('html').attr('MadCap:PathToHelpSystem') + 'Content/Resources/Code/ZeroClipboard.swf';
+	ZeroClipboard.setMoviePath(pathToFlash);
+			
+	function bindToClipBord(element,content){
+		var clip = new ZeroClipboard.Client();
+		clip.setText(content);
+		clip.glue(element);
+	};
+		
+	if(location.protocol==='file:'){
+		$('.copylink-marker').remove();
+	} else{
+			$('.copylink-marker').each(function(){
+				var text = $(this).parent().parent().children('.prettyprint').text();
+				$(this).hover(function(){
+					bindToClipBord(this,text);
+				},
+				function(){});
+			});	
+	}		
+};
+                /* ]]> */</script>
+        <script type="text/javascript" src="SkinSupport/MadCapBodyEnd.js">
+        </script>
+    </body>
+</html>

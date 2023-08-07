@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/com.db4o.ome.feature_8.1.0.jar" id="com.db4o.ome.feature" version="8.1.0"/>
+</site>
