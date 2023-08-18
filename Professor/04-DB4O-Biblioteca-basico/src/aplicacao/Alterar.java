@@ -69,9 +69,12 @@ public class Alterar {
 		if(resultados2.size()>0 && resultados3.size()>0) {
 			Livro livroPhp = resultados2.get(0);
             Autor autorMaria = resultados3.get(0);
-
-            livroPhp.getAutores().add(autorMaria);
+			if (autorMaria != null) {
+				autorMaria.remover(livroPhp);
+				livroPhp.remover(autorMaria);
+			}
             manager.store(livroPhp);
+			manager.store(autorMaria);
             manager.commit();
 			System.out.println("alterou autor livro java");
 		}
@@ -97,10 +100,12 @@ public class Alterar {
         if (resultados4.size() > 0 && resultados5.size() > 0) {
             Livro livroPhp = resultados4.get(0);
             Autor autorAntonio = resultados5.get(0);
-
-            livroPhp.getAutores().remove(autorAntonio);
+			if (autorAntonio != null) {
+            	livroPhp.remover(autorAntonio);
+				autorAntonio.remover(livroPhp);
+			}
             manager.store(livroPhp);
-            manager.delete(autorAntonio);
+			manager.store(autorAntonio);
             manager.commit();
             System.out.println("Removeu autor 'antonio' do livro 'php'");
         } else {
