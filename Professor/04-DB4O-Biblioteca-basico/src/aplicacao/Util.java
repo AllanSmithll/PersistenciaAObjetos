@@ -27,7 +27,7 @@ public class Util {
 		EmbeddedConfiguration config =  Db4oEmbedded.newConfiguration(); 
 		config.common().messageLevel(0);  // mensagens na tela 0(desliga),1,2,3...
 		
-		// habilitar cascata na alteração, remoção e leitura
+		// habilitar cascata na alteraï¿½ï¿½o, remoï¿½ï¿½o e leitura
 		config.common().objectClass(Livro.class).cascadeOnDelete(true);;
 		config.common().objectClass(Livro.class).cascadeOnUpdate(true);;
 		config.common().objectClass(Livro.class).cascadeOnActivate(true);
@@ -35,7 +35,7 @@ public class Util {
 		config.common().objectClass(Autor.class).cascadeOnUpdate(true);;
 		config.common().objectClass(Autor.class).cascadeOnActivate(true);
 		
-		// nivel de profundidade do grafo para leitura e atualização
+		// nivel de profundidade do grafo para leitura e atualizaï¿½ï¿½o
 //		config.common().objectClass(Livro.class).updateDepth(5);
 //		config.common().objectClass(Livro.class).minimumActivationDepth(5);
 //		config.common().objectClass(Autor.class).updateDepth(5);

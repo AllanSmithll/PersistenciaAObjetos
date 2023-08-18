@@ -39,8 +39,11 @@ public class Alterar {
 		List<Livro> resultados1 = q1.execute(); 
 
 		if(resultados1.size()>0) {
-			resultados1.remove(-1);
-			manager.commit();
+			Livro livroJava = resultados1.get(0);
+            int quantidadeExemplares = livroJava.getQuant();
+            livroJava.setQuant(quantidadeExemplares-1);
+            manager.store(livroJava);
+            manager.commit();
 			System.out.println("alterou quantidade livro java");
 		}
 		else
@@ -64,8 +67,12 @@ public class Alterar {
 		List<Autor> resultados3 = q3.execute(); 
 
 		if(resultados2.size()>0 && resultados3.size()>0) {
-			//adicionar autor ao livro
-			//atualizar livro no banco
+			Livro livroPhp = resultados2.get(0);
+            Autor autorMaria = resultados3.get(0);
+
+            livroPhp.getAutores().add(autorMaria);
+            manager.store(livroPhp);
+            manager.commit();
 			System.out.println("alterou autor livro java");
 		}
 		else
@@ -77,8 +84,28 @@ public class Alterar {
 		 * remover autor de nome "antonio" do livro titulo "php" (vice-versa)
 		 * 
 		 */
-		
-		
+		Query q4 = manager.query();
+        q4.constrain(Livro.class);
+        q4.descend("titulo").constrain("php");
+        List<Livro> resultados4 = q4.execute();
+
+        Query q5 = manager.query();
+        q5.constrain(Autor.class);
+        q5.descend("nome").constrain("antonio");
+        List<Autor> resultados5 = q5.execute();
+
+        if (resultados4.size() > 0 && resultados5.size() > 0) {
+            Livro livroPhp = resultados4.get(0);
+            Autor autorAntonio = resultados5.get(0);
+
+            livroPhp.getAutores().remove(autorAntonio);
+            manager.store(livroPhp);
+            manager.delete(autorAntonio);
+            manager.commit();
+            System.out.println("Removeu autor 'antonio' do livro 'php'");
+        } else {
+            System.out.println("Livro 'php' ou autor 'antonio' não encontrado(s)");
+        }
 	}
 
 
