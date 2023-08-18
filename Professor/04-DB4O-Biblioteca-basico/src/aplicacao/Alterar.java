@@ -106,6 +106,8 @@ public class Alterar {
 			}
             manager.store(livroPhp);
 			manager.store(autorAntonio);
+			if (autorAntonio.getLivros().isEmpty())
+				manager.delete(autorAntonio);
             manager.commit();
             System.out.println("Removeu autor 'antonio' do livro 'php'");
         } else {
