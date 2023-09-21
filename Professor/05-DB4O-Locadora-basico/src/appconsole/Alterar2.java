@@ -30,11 +30,11 @@ public class Alterar2 {
 			
 			if(resultados.size()>0) {
 				Carro car =  resultados.get(0);
-				//alterar a situação do carro 
+				//alterar a situaï¿½ï¿½o do carro 
 				car.setAlugado(false);
 				// obter o ultimo aluguel do carro
 				Aluguel alug = car.getAlugueis().get( car.getAlugueis().size()-1 );
-				//alterar a situação do alugel 
+				//alterar a situaï¿½ï¿½o do alugel 
 				alug.setFinalizado(true);
 				//atualizar carro no banco
 				manager.store(car);

@@ -7,6 +7,7 @@
 package appswing;
 
 import java.awt.Color;
+import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,12 +32,9 @@ import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
 import com.db4o.ObjectContainer;
-import com.db4o.query.Query;
 
-import appconsole.Util;
 import modelo.Aluguel;
-import modelo.Carro;
-import modelo.Cliente;
+import regras_negocio.Fachada;
 
 public class TelaAluguel {
 	private JDialog frame;
@@ -57,25 +55,24 @@ public class TelaAluguel {
 	private JLabel label_4;
 	private JLabel label_5;
 	private JLabel label_6;
-	private JButton button_3;
-	
 	private ObjectContainer manager;
 	Random gerador = new Random();
+	private JButton button_3;
 
 	/**
 	 * Launch the application.
 	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					TelaAluguel tela = new TelaAluguel();
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					TelaAluguel tela = new TelaAluguel();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 
 	/**
 	 * Create the application.
@@ -99,12 +96,12 @@ public class TelaAluguel {
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowOpened(WindowEvent e) {
-				manager = Util.conectarBanco();
+				Fachada.inicializar();
 				listagem();
 			}
 			@Override
 			public void windowClosing(WindowEvent e) {
-				Util.desconectar();
+				Fachada.finalizar();
 			}
 		});
 
@@ -167,45 +164,9 @@ public class TelaAluguel {
 					String cpf = textField_3.getText();
 					double diaria = Double.parseDouble(textField_4.getText());
 
-					//localizar cliente
-					Query q = manager.query();
-					q.constrain(Cliente.class);
-					q.descend("cpf").descend(cpf);
-					List<Cliente> resultados = q.execute();
-					if (resultados.size() > 0) {
-						Cliente cliente = resultados.get(0);
-
-						//localizar carro
-						Query q2 = manager.query();
-						q2.constrain(Carro.class);
-						q2.descend("placa").descend(placa);
-						List<Carro> carros = q2.execute();
-						if (carros.size() > 0) {
-							Carro carro = carros.get(0);
-
-							//criar aluguel
-							Aluguel aluguel = new Aluguel(dataInicio, dataFim, diaria);
-							int id = Util.gerarIdAluguel();
-							aluguel.setId(id);
-							aluguel.setCarro(carro);
-							aluguel.setCliente(cliente);
-							
-							carro.adicionar(aluguel);
-							carro.setAlugado(true);
-							cliente.adicionar(aluguel);
-
-							//atualizar objetos no banco
-							manager.store(aluguel);
-							manager.commit();
-							label.setText("Aluguel criado: "+ aluguel.getId());
-							listagem();
-						}
-						else 
-							label.setText("Carro n�o existe");
-					}
-					else 
-						label.setText("Cliente n�o existe");
-
+					Fachada.alugarCarro(cpf, placa, diaria, dataInicio, dataFim);
+					label.setText("aluguel criado");
+					listagem();
 				}
 				catch(Exception ex) {
 					label.setText(ex.getMessage());
@@ -245,29 +206,9 @@ public class TelaAluguel {
 					if (table.getSelectedRow() >= 0) {	
 						int idAluguel = (int) table.getValueAt( table.getSelectedRow(), 0);
 
-						//consultar aluguel banco
-						Query q = manager.query();
-						q.constrain(Aluguel.class);  				
-						q.descend("id").constrain(idAluguel);		 
-						List<Aluguel> resultados = q.execute(); 
-
-						if(resultados.size()>0) {
-							Aluguel aluguel = resultados.get(0);
-							Carro carro = aluguel.getCarro();
-							carro.remover(aluguel);
-							aluguel.setCarro(null);
-
-							Cliente cliente = aluguel.getCliente();
-							cliente.remover(aluguel);
-							aluguel.setCliente(null);
-
-							manager.store(carro);
-							manager.store(cliente);
-							manager.delete(aluguel);
-							manager.commit();
-							label.setText("aluguel apagado" );
-							listagem();
-						}
+						Fachada.excluirAluguel(idAluguel);
+						label.setText("aluguel apagado" );
+						listagem();
 
 					}
 					else
@@ -310,7 +251,7 @@ public class TelaAluguel {
 		textField_4 = new JTextField();
 		textField_4.setFont(new Font("Dialog", Font.PLAIN, 12));
 		textField_4.setColumns(10);
-		textField_4.setBounds(555, 298, 101, 20);
+		textField_4.setBounds(555, 298, 168, 20);
 		frame.getContentPane().add(textField_4);
 
 		label_5 = new JLabel("diaria");
@@ -323,24 +264,10 @@ public class TelaAluguel {
 			public void actionPerformed(ActionEvent e) {
 				try{
 					if (table.getSelectedRow() >= 0) {	
-						int idAluguel = (int) table.getValueAt( table.getSelectedRow(), 0);
-
-						Query q = manager.query();
-						q.constrain(Aluguel.class);  				
-						q.descend("id").constrain(idAluguel);		 
-						List<Aluguel> resultados = q.execute(); 
-
-						if(resultados.size()>0) {
-							Aluguel aluguel = resultados.get(0);
-							aluguel.setFinalizado(true);
-							Carro carro = aluguel.getCarro();
-							carro.setAlugado(false);
-
-							manager.store(aluguel);
-							manager.commit();
-							label.setText("aluguel atualizado" );
-							listagem();
-						}
+						String placa = (String) table.getValueAt( table.getSelectedRow(), 2); //coluna 2
+						Fachada.devolverCarro(placa);
+						label.setText("carro devolvido" );
+						listagem();
 					}
 				}
 				catch(Exception ex) {
@@ -355,10 +282,8 @@ public class TelaAluguel {
 
 	public void listagem() {
 		try{
-			//ler os alugueis do banco
-			Query q = manager.query();
-			q.constrain(Aluguel.class);  				
-			List<Aluguel> lista = q.execute();
+			//ler os carros do banco
+			List<Aluguel> lista = Fachada.listarAlugueis();
 
 			// o model armazena todas as linhas e colunas do table
 			DefaultTableModel model = new DefaultTableModel();
@@ -387,5 +312,8 @@ public class TelaAluguel {
 			label.setText(erro.getMessage());
 		}
 	}
+
 	
+
+
 }

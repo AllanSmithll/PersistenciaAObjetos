@@ -30,7 +30,7 @@ public class Consultar {
 			q = manager.query();
 			q.constrain(Aluguel.class);
 			q.descend("carro").descend("modelo").constrain("palio");
-			q.descend("carro").descend("placa").orderAscending();	//ordenação
+			q.descend("carro").descend("placa").orderAscending();	//ordenaï¿½ï¿½o
 			List<Aluguel> resultados = q.execute();
 			for(Aluguel a : resultados)
 				System.out.println(a);

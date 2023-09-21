@@ -15,7 +15,6 @@ import com.db4o.ObjectContainer;
  * Prof. Fausto Ayres
  **********************************/
 
-import modelo.Aluguel;
 import modelo.Carro;
 import modelo.Cliente;
 
