@@ -1,0 +1,36 @@
+[EL Fine]: server: 2023-10-24 16:32:57.926--Thread(Thread[#1,main,5,main])--Configured server platform: org.eclipse.persistence.platform.server.NoServerPlatform
+[EL Config]: metadata: 2023-10-24 16:32:58.06--ServerSession(1002191352)--Thread(Thread[#1,main,5,main])--The access type for the persistent class [class modelo.Pessoa] is set to [FIELD].
+[EL Config]: metadata: 2023-10-24 16:32:58.074--ServerSession(1002191352)--Thread(Thread[#1,main,5,main])--The access type for the persistent class [class modelo.Aluno] is set to [FIELD].
+[EL Config]: metadata: 2023-10-24 16:32:58.075--ServerSession(1002191352)--Thread(Thread[#1,main,5,main])--The alias name for the entity class [class modelo.Aluno] is being defaulted to: Aluno.
+[EL Config]: metadata: 2023-10-24 16:32:58.075--ServerSession(1002191352)--Thread(Thread[#1,main,5,main])--The alias name for the entity class [class modelo.Pessoa] is being defaulted to: Pessoa.
+[EL Config]: metadata: 2023-10-24 16:32:58.078--ServerSession(1002191352)--Thread(Thread[#1,main,5,main])--The table name for entity [class modelo.Pessoa] is being defaulted to: PESSOA.
+[EL Config]: metadata: 2023-10-24 16:32:58.087--ServerSession(1002191352)--Thread(Thread[#1,main,5,main])--The column name for element [nome] is being defaulted to: NOME.
+[EL Config]: metadata: 2023-10-24 16:32:58.089--ServerSession(1002191352)--Thread(Thread[#1,main,5,main])--The column name for element [id] is being defaulted to: ID.
+[EL Config]: metadata: 2023-10-24 16:32:58.091--ServerSession(1002191352)--Thread(Thread[#1,main,5,main])--The discriminator column name for the root inheritance class [modelo.Pessoa] is being defaulted to: DTYPE.
+[EL Config]: metadata: 2023-10-24 16:32:58.091--ServerSession(1002191352)--Thread(Thread[#1,main,5,main])--The column name for element [nota] is being defaulted to: NOTA.
+[EL Info]: 2023-10-24 16:32:58.17--ServerSession(1002191352)--Thread(Thread[#1,main,5,main])--EclipseLink, version: Eclipse Persistence Services - 4.0.2.v202306161219
+[EL Fine]: connection: 2023-10-24 16:32:58.362--Thread(Thread[#1,main,5,main])--Detected database platform: org.eclipse.persistence.platform.database.MySQLPlatform
+[EL Fine]: connection: 2023-10-24 16:32:58.368--ServerSession(1002191352)--Connection(777457133)--Thread(Thread[#1,main,5,main])--connecting(DatabaseLogin(
+	platform=>MySQLPlatform
+	user name=> "root"
+	datasource URL=> "jdbc:mysql://localhost:3306/agenda"
+))
+[EL Config]: connection: 2023-10-24 16:32:58.39--ServerSession(1002191352)--Connection(1319483139)--Thread(Thread[#1,main,5,main])--Connected: jdbc:mysql://localhost:3306/agenda
+	User: root@localhost
+	Database: MySQL  Version: 5.5.5-10.4.28-MariaDB
+	Driver: MySQL Connector/J  Version: mysql-connector-j-8.1.0 (Revision: 7b6f9a337afe6ccb41823df485bf848ca7952b09)
+[EL Fine]: connection: 2023-10-24 16:32:58.421--ServerSession(1002191352)--Thread(Thread[#1,main,5,main])--/file:/C:/Users/faust/Dropbox/aula-copratilhada/POB/Persistencia-MOR - novo/JPA-Agenda-basico/target/classes/_eclipselink-mysql login successful
+[EL Fine]: sql: 2023-10-24 16:32:58.447--ServerSession(1002191352)--Connection(1319483139)--Thread(Thread[#1,main,5,main])--CREATE TABLE PESSOA (ID INTEGER AUTO_INCREMENT NOT NULL, DTYPE VARCHAR(31), NOME VARCHAR(255), NOTA DOUBLE, PRIMARY KEY (ID))
+[EL Fine]: sql: 2023-10-24 16:32:58.487--ClientSession(987547666)--Connection(1319483139)--Thread(Thread[#1,main,5,main])--INSERT INTO PESSOA (NOME, DTYPE) VALUES (?, ?)
+	bind => [joao, Pessoa]
+[EL Fine]: sql: 2023-10-24 16:32:58.494--ClientSession(987547666)--Connection(1319483139)--Thread(Thread[#1,main,5,main])--INSERT INTO PESSOA (NOME, DTYPE) VALUES (?, ?)
+	bind => [maria, Pessoa]
+[EL Fine]: sql: 2023-10-24 16:32:58.497--ClientSession(987547666)--Connection(1319483139)--Thread(Thread[#1,main,5,main])--INSERT INTO PESSOA (NOME, DTYPE) VALUES (?, ?)
+	bind => [jose, Pessoa]
+[EL Fine]: sql: 2023-10-24 16:32:58.503--ClientSession(987547666)--Connection(1319483139)--Thread(Thread[#1,main,5,main])--INSERT INTO PESSOA (NOME, NOTA, DTYPE) VALUES (?, ?, ?)
+	bind => [paulo, 9.0, Aluno]
+[EL Fine]: sql: 2023-10-24 16:32:58.506--ClientSession(987547666)--Connection(1319483139)--Thread(Thread[#1,main,5,main])--INSERT INTO PESSOA (NOME, NOTA, DTYPE) VALUES (?, ?, ?)
+	bind => [ana, 10.0, Aluno]
+[EL Fine]: connection: 2023-10-24 16:32:58.508--ServerSession(1002191352)--Connection(1319483139)--Thread(Thread[#1,main,5,main])--disconnect
+[EL Fine]: connection: 2023-10-24 16:32:58.509--ServerSession(1002191352)--Thread(Thread[#1,main,5,main])--/file:/C:/Users/faust/Dropbox/aula-copratilhada/POB/Persistencia-MOR - novo/JPA-Agenda-basico/target/classes/_eclipselink-mysql logout successful
+[EL Fine]: connection: 2023-10-24 16:32:58.509--ServerSession(1002191352)--Connection(777457133)--Thread(Thread[#1,main,5,main])--disconnect
